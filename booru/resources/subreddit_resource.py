@@ -44,5 +44,5 @@ class SubredditResource(Resource):
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")
         else:
-            return subreddit.id, 201
+            return subreddit.name, 201
 

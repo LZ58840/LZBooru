@@ -3,8 +3,7 @@ from booru.models.subreddit import Subreddit
 
 
 class SubredditSchema(Schema):
-    id = fields.Integer()
-    name = fields.String(allow_none=False)
+    name = fields.String()
 
     @post_load
     def make_subreddit(self, data, **kwargs):

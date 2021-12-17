@@ -44,5 +44,5 @@ class ContributorResource(Resource):
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")
         else:
-            return contributor.id, 201
+            return contributor.name, 201
 
