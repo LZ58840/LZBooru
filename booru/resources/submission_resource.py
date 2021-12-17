@@ -7,28 +7,29 @@ from booru.database import db
 from booru.models.submission import Submission
 from booru.schemas.submission_schema import SubmissionSchema
 
+
 SUBMISSION_ENDPOINT = "/api/submission"
 
+
 class SubmissionResource(Resource):
-    def get(self, id=None):
-        if not id:
-            flair = request.args.get("flair")
-            return self._get_by_flair(flair), 200
+    def get(self, url=None):
+        if not url:
+            return self._get_all_submissions(), 200
         
         try:
-            return self._get_by_id(id), 200
+            return self._get_by_url(url), 200
         except NoResultFound:
-            abort(404, message="Submission not found")
-        
-    def _get_by_flair(self, flair):
-        submissions = Submission.query.filter_by(flair=flair).all()
-        submissions_json = [SubmissionSchema().dump(submissions) for submission in submissions]
-        return submissions_json
+            abort(404, message="Submission not found.")
 
-    def _get_by_id(self, link_id):
-        submission = Submission.query.filter_by(link_id=link_id).first()
-        submission_json = SubmissionSchema().dump(submission)
+    def _get_all_submissions(self):
+        submissions = Submission.query.all()
+        submission_json = [SubmissionSchema().dump(submission) for submission in submissions]
+        return submission_json
         
+    def _get_by_url(self, url):
+        submission = Submission.query.filter_by(url=url).first()
+        submission_json = SubmissionSchema().dump(submission)
+
         if not submission_json:
             raise NoResultFound()
 
@@ -43,4 +44,4 @@ class SubmissionResource(Resource):
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")
         else:
-            return submission.link_id, 201
+            return submission.url, 201
