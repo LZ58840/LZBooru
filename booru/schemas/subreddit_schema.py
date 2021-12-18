@@ -4,6 +4,9 @@ from booru.models.subreddit import Subreddit
 
 class SubredditSchema(Schema):
     name = fields.String()
+    created = fields.DateTime(allow_none=False)
+    updated = fields.DateTime()
+    initialized = fields.Boolean()
 
     @post_load
     def make_subreddit(self, data, **kwargs):
