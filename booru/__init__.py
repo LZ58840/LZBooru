@@ -6,11 +6,15 @@ from booru.resources.contributor_resource import CONTRIBUTOR_ENDPOINT, Contribut
 from booru.resources.image_resource import IMAGE_ENDPOINT, ImageResource
 from booru.resources.submission_resource import SubmissionResource, SUBMISSION_ENDPOINT
 from booru.resources.subreddit_resource import SUBREDDIT_ENDPOINT, SubredditResource
-from config import *
+
+from dotenv import dotenv_values
+
 
 def create_app():
+    config = dotenv_values(".env")
+
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+    app.config["SQLALCHEMY_DATABASE_URI"] = config["DATABASE_URI"]
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
     # initialize database
