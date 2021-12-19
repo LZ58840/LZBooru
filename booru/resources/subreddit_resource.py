@@ -1,7 +1,8 @@
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from booru.resources.auth_resource import AuthResource
 
 from booru.database import db
 from booru.models.subreddit import Subreddit
@@ -11,7 +12,7 @@ from booru.schemas.subreddit_schema import SubredditSchema
 SUBREDDIT_ENDPOINT = "/api/subreddit"
 
 
-class SubredditResource(Resource):
+class SubredditResource(AuthResource):
     def get(self, name=None):
         if not name:
             return self._get_all_subreddits(), 200

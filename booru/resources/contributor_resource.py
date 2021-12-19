@@ -1,7 +1,8 @@
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from booru.resources.auth_resource import AuthResource
 
 from booru.database import db
 from booru.models.contributor import Contributor
@@ -11,7 +12,7 @@ from booru.schemas.contributor_schema import ContributorSchema
 CONTRIBUTOR_ENDPOINT = "/api/contributor"
 
 
-class ContributorResource(Resource):
+class ContributorResource(AuthResource):
     def get(self, name=None):
         if not name:
             return self._get_all_contributors(), 200

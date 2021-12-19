@@ -1,6 +1,7 @@
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import abort
 from sqlalchemy.exc import IntegrityError
+from booru.resources.auth_resource import AuthResource
 
 from booru.database import db
 from booru.models.image import Image
@@ -10,7 +11,7 @@ from booru.schemas.image_schema import ImageSchema
 IMAGE_ENDPOINT = "/api/image"
 
 
-class ImageResource(Resource):
+class ImageResource(AuthResource):
     def get(self):
         images = Image.query.all()
         images_json = [ImageSchema().dump(image) for image in images]

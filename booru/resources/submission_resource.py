@@ -1,7 +1,8 @@
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from booru.resources.auth_resource import AuthResource
 
 from booru.database import db
 from booru.models.submission import Submission
@@ -11,7 +12,7 @@ from booru.schemas.submission_schema import SubmissionSchema
 SUBMISSION_ENDPOINT = "/api/submission"
 
 
-class SubmissionResource(Resource):
+class SubmissionResource(AuthResource):
     def get(self, url=None):
         if not url:
             return self._get_all_submissions(), 200
