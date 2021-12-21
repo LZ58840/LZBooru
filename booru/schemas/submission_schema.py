@@ -7,7 +7,7 @@ class SubmissionSchema(Schema):
     title = fields.String(allow_none=False)
     contributor = fields.String(allow_none=False)
     subreddit = fields.String(allow_none=False)
-    created = fields.DateTime(allow_none=False)
+    created = fields.Integer(allow_none=False)
     flair = fields.String(allow_none=False)
     image = fields.Integer(allow_none=False)
     nsfw = fields.Boolean()

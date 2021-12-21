@@ -6,7 +6,7 @@ class Submission(db.Model):
     title = db.Column(db.String(300), nullable=False)
     contributor = db.Column(db.String(20), db.ForeignKey('contributor.name'), nullable=False)
     subreddit = db.Column(db.String(20), db.ForeignKey('subreddit.name'), nullable=False)
-    created = db.Column(db.DateTime, nullable=False)
+    created = db.Column(db.Integer, nullable=False)
     flair = db.Column(db.String(64), nullable=False)
     image = db.Column(db.Integer, db.ForeignKey('image.id'), nullable=False)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)

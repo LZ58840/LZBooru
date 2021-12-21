@@ -8,6 +8,8 @@ from booru.database import db
 from booru.models.subreddit import Subreddit
 from booru.schemas.subreddit_schema import SubredditSchema
 
+from booru.api.subreddit_api import subreddit_exists, get_subreddit_created
+
 
 SUBREDDIT_ENDPOINT = "/api/subreddit"
 
@@ -37,13 +39,20 @@ class SubredditResource(AuthResource):
         return subreddit_json
 
     def post(self):
-        subreddit = SubredditSchema().load(request.get_json())
+        subreddit_json = request.get_json()
+        subreddit_name = subreddit_json["name"]
 
-        try:
-            db.session.add(subreddit)
-            db.session.commit()
-        except IntegrityError as e:
-            abort(500, message="Unexpected Error!")
+        if not subreddit_exists(subreddit_name):
+            abort(400, message=f"Subreddit {subreddit_name} does not exist!")
         else:
-            return subreddit.name, 201
+            subreddit_json["created"] = get_subreddit_created(subreddit_name)
+            subreddit = SubredditSchema().load(subreddit_json)
+
+            try:
+                db.session.add(subreddit)
+                db.session.commit()
+            except IntegrityError as e:
+                abort(500, message="Unexpected Error!")
+            else:
+                return subreddit.name, 201
 
