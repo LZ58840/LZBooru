@@ -55,4 +55,16 @@ class SubredditResource(AuthResource):
                 abort(500, message="Unexpected Error!")
             else:
                 return subreddit.name, 201
+    
+    def patch(self):
+        subreddits_json = request.get_json()
 
+        try:
+            for subreddit_json in subreddits_json:
+                subreddit = SubredditSchema.load(subreddit_json, instance=Subreddit().query.get(subreddit_json["name"]), partial=True)
+                db.session.add(subreddit)
+            db.session.commit()
+        except IntegrityError as e:
+            abort(500, message="Unexpected Error!")
+        else:
+            return len(subreddits_json), 201
