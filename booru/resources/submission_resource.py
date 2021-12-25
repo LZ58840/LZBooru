@@ -38,7 +38,7 @@ class SubmissionResource(AuthResource):
 
     def post(self):
         submissions_json = request.get_json()
-        submissions, _ = SubmissionSchema(many=True).load(submissions_json)
+        submissions = SubmissionSchema(many=True).load(submissions_json)
 
         try:
             db.session.add_all(submissions)

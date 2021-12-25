@@ -1,7 +1,8 @@
-from greg.api import get_subreddit_submissions_json, format_submission_json
+from greg.api import format_image_json, get_subreddit_submissions_json, format_submission_json
 from queue import Queue
 from threading import Thread
 from multiprocessing import cpu_count, Pool
+import itertools
 
 
 def _get_subreddit_submissions_thread(subreddits_queue, submissions_json):
@@ -30,3 +31,9 @@ def format_submissions(submissions_json):
     pool = Pool(cpu_count() - 1)
     formatted_submissions_json = pool.map(format_submission_json, submissions_json)
     return formatted_submissions_json
+
+
+def format_images(submissions_json):
+    pool = Pool(cpu_count() - 1)
+    formatted_image_json = pool.map(format_image_json, submissions_json)
+    return list(itertools.chain.from_iterable(formatted_image_json))

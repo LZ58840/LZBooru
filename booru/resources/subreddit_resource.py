@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from booru.resources.auth_resource import AuthResource
 
-from booru.database import db
+from booru.database import db, merge_all
 from booru.models.subreddit import Subreddit
 from booru.schemas.subreddit_schema import SubredditSchema
 
@@ -56,13 +56,14 @@ class SubredditResource(AuthResource):
             else:
                 return subreddit.name, 201
     
-    def patch(self):
+    def put(self):
         subreddits_json = request.get_json()
+        subreddits = SubredditSchema(many=True).load(subreddits_json)
 
         try:
-            for subreddit_json in subreddits_json:
-                subreddit = SubredditSchema.load(subreddit_json, instance=Subreddit().query.get(subreddit_json["name"]), partial=True)
-                db.session.add(subreddit)
+            # merge_all(db, subreddits)
+            for subreddit in subreddits:
+                db.session.merge(subreddit)
             db.session.commit()
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")

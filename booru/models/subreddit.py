@@ -6,4 +6,3 @@ class Subreddit(db.Model):
     created = db.Column(db.Integer, nullable=False)
     updated = db.Column(db.Integer)
     initialized = db.Column(db.Boolean, nullable=False, default=False)
-    submissions = db.relationship('Submission', backref='submission_subreddit', lazy=True)

@@ -2,7 +2,6 @@ from flask import Flask
 from flask_restful import Api
 
 from booru.database import db
-from booru.resources.contributor_resource import CONTRIBUTOR_ENDPOINT, ContributorResource
 from booru.resources.image_resource import IMAGE_ENDPOINT, ImageResource
 from booru.resources.submission_resource import SubmissionResource, SUBMISSION_ENDPOINT
 from booru.resources.subreddit_resource import SUBREDDIT_ENDPOINT, SubredditResource
@@ -32,7 +31,6 @@ def create_app():
     # initialize routes
     api = Api(app)
     api.add_resource(SubmissionResource, SUBMISSION_ENDPOINT, f"{SUBMISSION_ENDPOINT}/<url>")
-    api.add_resource(ContributorResource, CONTRIBUTOR_ENDPOINT, f"{CONTRIBUTOR_ENDPOINT}/<name>")
     api.add_resource(ImageResource, IMAGE_ENDPOINT)
     api.add_resource(SubredditResource, SUBREDDIT_ENDPOINT, f"{SUBREDDIT_ENDPOINT}/<name>")
 
