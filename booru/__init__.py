@@ -2,15 +2,19 @@ from flask import Flask
 from flask_restful import Api
 
 from booru.database import db
-from booru.resources.contributor_resource import CONTRIBUTOR_ENDPOINT, ContributorResource
 from booru.resources.image_resource import IMAGE_ENDPOINT, ImageResource
+from booru.resources.link_resource import LINK_ENDPOINT, LinkResource
 from booru.resources.submission_resource import SubmissionResource, SUBMISSION_ENDPOINT
 from booru.resources.subreddit_resource import SUBREDDIT_ENDPOINT, SubredditResource
-from config import *
+
+from dotenv import dotenv_values
+
 
 def create_app():
+    config = dotenv_values(".env")
+
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_LOCATION
+    app.config["SQLALCHEMY_DATABASE_URI"] = config["DATABASE_URI"]
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
     # initialize database
@@ -28,8 +32,8 @@ def create_app():
     # initialize routes
     api = Api(app)
     api.add_resource(SubmissionResource, SUBMISSION_ENDPOINT, f"{SUBMISSION_ENDPOINT}/<url>")
-    api.add_resource(ContributorResource, CONTRIBUTOR_ENDPOINT, f"{CONTRIBUTOR_ENDPOINT}/<name>")
     api.add_resource(ImageResource, IMAGE_ENDPOINT)
     api.add_resource(SubredditResource, SUBREDDIT_ENDPOINT, f"{SUBREDDIT_ENDPOINT}/<name>")
+    api.add_resource(LinkResource, LINK_ENDPOINT)
 
     return app
