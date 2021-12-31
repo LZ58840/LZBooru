@@ -41,7 +41,8 @@ class SubmissionResource(AuthResource):
         submissions = SubmissionSchema(many=True).load(submissions_json)
 
         try:
-            db.session.add_all(submissions)
+            for submission in submissions:
+                db.session.merge(submission)
             db.session.commit()
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")

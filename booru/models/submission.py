@@ -9,5 +9,6 @@ class Submission(db.Model):
     created = db.Column(db.Integer, nullable=False)
     flair = db.Column(db.String(64), nullable=True)
     images = db.relationship('Image', backref="submission_image", lazy=True)
+    link = db.relationship('Link', backref="submission_link", lazy=True)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)
     removed = db.Column(db.Boolean, nullable=False, default=False)

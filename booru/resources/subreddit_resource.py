@@ -4,11 +4,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from booru.resources.auth_resource import AuthResource
 
-from booru.database import db, merge_all
+from booru.database import db
 from booru.models.subreddit import Subreddit
+from booru.models.submission import Submission
 from booru.schemas.subreddit_schema import SubredditSchema
 
-from booru.api.subreddit_api import subreddit_exists, get_subreddit_created
+from booru.api import subreddit_exists, get_subreddit_created
 
 
 SUBREDDIT_ENDPOINT = "/api/subreddit"
@@ -23,14 +24,24 @@ class SubredditResource(AuthResource):
             return self._get_subreddit_by_name(name), 200
         except NoResultFound:
             abort(404, message="Subreddit not found.")
+    
+    def _update_subreddit(self, subreddit):
+        submission = Submission.query.filter_by(subreddit=subreddit.name).order_by(Submission.created.desc()).first()
+        subreddit.updated = submission.created
 
     def _get_all_subreddits(self):
         subreddits = Subreddit.query.all()
+        for subreddit in subreddits: self._update_subreddit(subreddit)
+        db.session.commit()
+
         subreddits_json = [SubredditSchema().dump(subreddit) for subreddit in subreddits]
         return subreddits_json
     
     def _get_subreddit_by_name(self, name):
         subreddit = Subreddit.query.filter_by(name=name).first()
+        self._update_subreddit(subreddit)
+        db.session.commit()
+
         subreddit_json = SubredditSchema().dump(subreddit)
 
         if not subreddit_json:
@@ -55,17 +66,4 @@ class SubredditResource(AuthResource):
                 abort(500, message="Unexpected Error!")
             else:
                 return subreddit.name, 201
-    
-    def put(self):
-        subreddits_json = request.get_json()
-        subreddits = SubredditSchema(many=True).load(subreddits_json)
 
-        try:
-            # merge_all(db, subreddits)
-            for subreddit in subreddits:
-                db.session.merge(subreddit)
-            db.session.commit()
-        except IntegrityError as e:
-            abort(500, message="Unexpected Error!")
-        else:
-            return len(subreddits_json), 201

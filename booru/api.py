@@ -1,10 +1,10 @@
 from prawcore import NotFound
-from booru.api import reddit
+from api import praw_api
 
 
 def subreddit_exists(subreddit_name):
     try:
-        reddit.subreddits.search_by_name(subreddit_name, exact=True)
+        praw_api.subreddits.search_by_name(subreddit_name, exact=True)
     except NotFound:
         return False
     return True
@@ -12,5 +12,5 @@ def subreddit_exists(subreddit_name):
 
 def get_subreddit_created(subreddit_name):
     """Assume subreddit exists."""
-    subreddit = reddit.subreddit(subreddit_name)
+    subreddit = praw_api.subreddit(subreddit_name)
     return int(subreddit.created_utc)
