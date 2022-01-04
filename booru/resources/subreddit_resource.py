@@ -27,7 +27,8 @@ class SubredditResource(AuthResource):
     
     def _update_subreddit(self, subreddit):
         submission = Submission.query.filter_by(subreddit=subreddit.name).order_by(Submission.created.desc()).first()
-        subreddit.updated = submission.created
+        if submission is not None:
+            subreddit.updated = submission.created
 
     def _get_all_subreddits(self):
         subreddits = Subreddit.query.all()

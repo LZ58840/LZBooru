@@ -560,3 +560,4 @@ $RECYCLE.BIN/
 *.db
 .vscode/
 .idea/
+*.bak
