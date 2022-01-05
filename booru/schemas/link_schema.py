@@ -3,6 +3,10 @@ from booru.models.link import Link
 
 
 class LinkSchema(Schema):
+    """
+    A Schema representing a Link in the LZBooru database.
+    """
+
     id = fields.String()
     url = fields.String(allow_none=False)
     created = fields.Integer(allow_none=False)

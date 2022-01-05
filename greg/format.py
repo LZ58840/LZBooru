@@ -3,6 +3,13 @@ import re
 
 
 def format_submission_json(submission_json):
+    """
+    Formats submission info as Submission.
+
+    :param submission_json: JSON formatted dict of submission from reddit
+    :return: JSON formatted dict of a Submission entry
+    """
+
     return {
         "id": submission_json["id"],
         "title": submission_json["title"],
@@ -15,6 +22,13 @@ def format_submission_json(submission_json):
 
 
 def format_link_json(submission_json):
+    """
+    Formats submission info as Link.
+
+    :param submission_json: JSON formatted dict of submission from reddit
+    :return: JSON formatted dict of a Link entry
+    """
+
     return {
         "url": submission_json["url"], 
         "created": submission_json["created_utc"],
@@ -24,6 +38,12 @@ def format_link_json(submission_json):
 
 
 def _get_link_type(link):
+    """
+    Classifies link based on URL patterns.
+
+    :param link: URL formatted str
+    :return: link type
+    """
     if re.match(IMGUR_PATTERN, link) is not None:
         return "imgur"
     elif re.match(REDDIT_PATTERN, link) is not None:

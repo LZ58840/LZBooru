@@ -3,6 +3,10 @@ from booru.models.subreddit import Subreddit
 
 
 class SubredditSchema(Schema):
+    """
+    A Schema representing a Subreddit in the LZBooru database.
+    """
+
     name = fields.String()
     created = fields.Integer(allow_none=False)
     updated = fields.Integer()

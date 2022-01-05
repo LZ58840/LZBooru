@@ -2,6 +2,8 @@ from booru.database import db
 
 
 class Submission(db.Model):
+    """A model representing a Submission in the LZBooru database."""
+
     id = db.Column(db.String(10), primary_key=True)
     title = db.Column(db.String(300), nullable=False)
     author = db.Column(db.String(20), nullable=False)

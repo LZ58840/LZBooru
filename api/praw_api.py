@@ -17,6 +17,7 @@ USER_AGENT = config["REDDIT_USER_AGENT"]
 
 
 def login_ro():
+    """Creates a Read-only Reddit instance."""
     for _ in range(LOGIN_TRIES):
         try:
             instance = Reddit(
