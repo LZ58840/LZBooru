@@ -1,5 +1,5 @@
 from prawcore import NotFound
-from api import praw_api
+from tools.apis import praw_api
 
 
 def subreddit_exists(subreddit_name):

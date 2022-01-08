@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import abort
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm.exc import NoResultFound
 from booru.resources.auth_resource import AuthResource
 
@@ -54,7 +54,7 @@ class SubmissionResource(AuthResource):
                 db.session.merge(submission)
             db.session.commit()
 
-        except IntegrityError as e:
+        except Exception as e:
             app.logger.exception(f'"POST {request.full_path}" 500')
             abort(500, message="Unexpected Error!")
 

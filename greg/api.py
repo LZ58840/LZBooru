@@ -1,6 +1,6 @@
 import requests
 from dotenv import dotenv_values
-from api import pmaw_api
+from tools.apis import pmaw_api
 
 
 config = dotenv_values(".env")

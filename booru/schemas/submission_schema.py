@@ -14,7 +14,6 @@ class SubmissionSchema(Schema):
     created = fields.Integer(allow_none=False)
     flair = fields.String(allow_none=True)
     nsfw = fields.Boolean()
-    removed = fields.Boolean()
 
     @post_load
     def make_submission(self, data, **kwargs):

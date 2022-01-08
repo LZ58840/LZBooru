@@ -3,7 +3,7 @@ from sched import scheduler
 from time import time, sleep
 from multiprocessing import Process, Queue
 from parsa.api import delete_succeeded_links, get_links, post_images, put_failed_links
-from parsa.log_queue import listener_process, worker_config
+from tools.loggers.multiproc_logger import listener_process, worker_config
 from parsa.proc import parse_generic_links, parse_imgur_links, parse_reddit_links
 
 from dotenv import dotenv_values
@@ -16,7 +16,7 @@ parser_configs = {
     "imgur": {
         "parser": parse_imgur_links,
         "quantity": 1000,
-        "refresh_delay": 10
+        "refresh_delay": 60
     },
     "reddit": {
         "parser": parse_reddit_links,
@@ -26,7 +26,7 @@ parser_configs = {
     "generic": {
         "parser": parse_generic_links,
         "quantity": 1000,
-        "refresh_delay": 10
+        "refresh_delay": 60
     }
 }
 
@@ -88,4 +88,3 @@ def run_all():
     main_logger.info("Joining parsers...")
     for p in processes:
         p.join()
-

@@ -33,12 +33,3 @@ def greg_daemon(local_handler):
 
     logging.debug(f"Finished aggregation chapter. Sleeping...")
     local_handler.enter(60, 1, greg_daemon, (local_handler,))
-
-
-def log_config():
-    """Configures logger with given formatting."""
-
-    root = logging.getLogger()
-    handler = root.handlers[0]
-    fmt = logging.Formatter(fmt=config["LOG_FMT"], datefmt=config["LOG_DATEFMT"])
-    handler.setFormatter(fmt)

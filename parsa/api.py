@@ -1,12 +1,11 @@
 import requests
 import re
-import logging
 from json.decoder import JSONDecodeError
 from prawcore.exceptions import Forbidden
 from time import sleep
 from datetime import datetime, timezone
 from dotenv import dotenv_values
-from api import praw_api
+from tools.apis import praw_api
 from parsa.patterns import *
 from parsa.urls import *
 from requests.exceptions import MissingSchema
