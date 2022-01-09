@@ -1,0 +1,13 @@
+Flask==2.0.2
+marshmallow==3.14.1
+pmaw==2.1.1
+praw==7.5.0
+prawcore==2.3.0
+python-dotenv==0.19.2
+requests==2.26.0
+SQLAlchemy==1.4.29
+
+Pillow>=9.0.0
+ImageHash>=4.2.1
+opencv-python>=4.5.5.62
+numpy>=1.22.0
