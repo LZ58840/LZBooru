@@ -37,12 +37,14 @@ class SubmissionResource(AuthResource):
         return submission_json
 
     def post(self):
-        submission = SubmissionSchema().load(request.get_json())
+        submissions_json = request.get_json()
+        submissions = SubmissionSchema(many=True).load(submissions_json)
 
         try:
-            db.session.add(submission)
+            for submission in submissions:
+                db.session.merge(submission)
             db.session.commit()
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")
         else:
-            return submission.url, 201
+            return len(submissions), 201

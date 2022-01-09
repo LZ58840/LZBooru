@@ -5,6 +5,7 @@ from booru.models.image import Image
 class ImageSchema(Schema):
     id = fields.Integer()
     url = fields.String(allow_none=False)
+    submission_id = fields.String(allow_none=False)
 
     @post_load
     def make_image(self, data, **kwargs):

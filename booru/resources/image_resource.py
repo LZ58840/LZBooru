@@ -18,13 +18,13 @@ class ImageResource(AuthResource):
         return images_json, 200
 
     def post(self):
-        image = ImageSchema().load(request.get_json())
+        images = ImageSchema(many=True).load(request.get_json())
 
         try:
-            db.session.add(image)
+            db.session.add_all(images)
             db.session.commit()
         except IntegrityError as e:
             abort(500, message="Unexpected Error!")
         else:
-            return image.id, 201
+            return [ImageSchema().dump(image) for image in images], 201
 
