@@ -1,15 +1,44 @@
+import logging
 from greg.api import get_subreddits, post_submissions, post_links
 from greg.proc import format_links, format_submissions, get_submissions
 
+from dotenv import dotenv_values
 
-REFRESH_DELAY = 60
+
+config = dotenv_values(".env")
 
 
-def GregDaemon(local_handler):
+def greg_daemon(local_handler):
+    """Aggregates and formats new incoming submissions given subreddits."""
+
+    logging.debug("Getting subreddits...")
     subreddits = get_subreddits()
+    logging.debug(f"Detected {len(subreddits)} subreddits.")
+
+    logging.debug("Getting submissions...")
     submissions = get_submissions(subreddits)
+
+    logging.info(f"Detected {len(submissions)} submissions, processing...")
     formatted_submissions = format_submissions(submissions)
+    logging.debug("Formatting links...")
     formatted_links = format_links(submissions)
-    post_submissions(formatted_submissions)
-    post_links(formatted_links)
-    local_handler.enter(REFRESH_DELAY, 1, GregDaemon, (local_handler,))
+
+    logging.debug("Posting submissions...")
+    s_code = post_submissions(formatted_submissions)
+    logging.debug(f"Received HTTP status code {s_code}.")
+
+    logging.debug("Posting links...")
+    l_code = post_links(formatted_links)
+    logging.debug(f"Received HTTP status code {l_code}.")
+
+    logging.debug(f"Finished aggregation chapter. Sleeping...")
+    local_handler.enter(60, 1, greg_daemon, (local_handler,))
+
+
+def log_config():
+    """Configures logger with given formatting."""
+
+    root = logging.getLogger()
+    handler = root.handlers[0]
+    fmt = logging.Formatter(fmt=config["LOG_FMT"], datefmt=config["LOG_DATEFMT"])
+    handler.setFormatter(fmt)

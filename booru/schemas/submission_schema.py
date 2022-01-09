@@ -3,6 +3,10 @@ from booru.models.submission import Submission
 
 
 class SubmissionSchema(Schema):
+    """
+    A Schema representing a Submission in the LZBooru database.
+    """
+
     id = fields.String()
     title = fields.String(allow_none=False)
     author = fields.String(allow_none=False)

@@ -7,14 +7,23 @@ from booru.database import db
 from booru.models.image import Image
 from booru.schemas.image_schema import ImageSchema
 
+from flask import current_app as app
+
 
 IMAGE_ENDPOINT = "/api/image"
 
 
 class ImageResource(AuthResource):
+    """
+    A Resource that handles requests related to Images.
+    """
+
     def get(self):
         images = Image.query.all()
         images_json = [ImageSchema().dump(image) for image in images]
+
+        app.logger.info(f'"GET {request.full_path}" 200')
+
         return images_json, 200
 
     def post(self):
@@ -23,8 +32,12 @@ class ImageResource(AuthResource):
         try:
             db.session.add_all(images)
             db.session.commit()
+
         except IntegrityError as e:
+            app.logger.exception(f'"POST {request.full_path}" 500')
             abort(500, message="Unexpected Error!")
+
         else:
-            return [ImageSchema().dump(image) for image in images], 201
+            app.logger.info(f'"POST {request.full_path}" 201')
+            return len(images), 201
 
