@@ -1,5 +1,6 @@
 from parsa.patterns import GENERIC_PATTERN, IMGUR_PATTERN, REDDIT_PATTERN
 import re
+import html
 
 
 def format_submission_json(submission_json):
@@ -12,7 +13,7 @@ def format_submission_json(submission_json):
 
     return {
         "id": submission_json["id"],
-        "title": submission_json["title"],
+        "title": html.unescape(submission_json["title"])[:300],
         "author": submission_json["author"],
         "subreddit": submission_json["subreddit"],
         "created": submission_json["created_utc"],

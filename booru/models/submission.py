@@ -13,4 +13,3 @@ class Submission(db.Model):
     images = db.relationship('Image', backref="submission_image", lazy=True)
     link = db.relationship('Link', backref="submission_link", lazy=True)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)
-    removed = db.Column(db.Boolean, nullable=False, default=False)
