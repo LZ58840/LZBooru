@@ -3,7 +3,9 @@
 from the [Wiktionary definition:](https://en.wiktionary.org/wiki/booru)
 
 > **Booru**
+> 
 > *noun*
+> 
 > (Internet) A form of imageboard where images are categorized with tags. 
 
 A basic image aggregator backend, with basic reverse image search.
@@ -15,7 +17,7 @@ Other tutorials I followed:
 [Flask API key implementation](https://github.com/ericsopa/flask-api-key/blob/master/goaway.py)
 [Multiprocessing Logging](https://fanchenbao.medium.com/python3-logging-with-multiprocessing-f51f460b8778)
 
-### Get Started
+## Get Started
 
 To get started, clone this repo and install the required modules in a virtual environment using `pip install -r requirements.txt`. 
 
@@ -29,11 +31,11 @@ To run each component, run the following commands:
 
 Logging will show in standard output and standard error by default. `supervisord` can be used to redirect those outputs to files.
 
-### Overview
+## Overview
 
 LZBooru is currently split into four main components: Booru, Greg, Parsa, and Coco.
 
-##### Booru
+### Booru
 
 The **board** component for LZBooru, nicknamed **Booru**. This is the Flask RESTful based component that interacts with a database to add, update, delete, and query tables defined by models. The models are as follows:
 
@@ -80,7 +82,7 @@ Each model has an associated endpoint in Flask, organized by Flask-RESTful as re
 
 The database itself is handled using SQLAlchemy and PostgreSQL. Originally, SQLite3 was used until the implementation of image similarity, which required more features such as `ARRAY` and `BIT` types as well as SQL function creation.
 
-##### Greg
+### Greg
 
 The **aggregator** component for LZBooru, nicknamed **Greg**. This component continuously aggregates submissions made to assigned subreddits through chapters. Currently, for both current posts and archived posts, the Pushshift API is used via PMAW. Each chapter executes the following procedure:
 
@@ -90,7 +92,7 @@ The **aggregator** component for LZBooru, nicknamed **Greg**. This component con
 4. Post the formatted submission and link data to the respective endpoints of **Booru**.
 5. Sleep for 60 seconds, then go back to step 1.
 
-##### Parsa
+### Parsa
 
 The **image parser** component for LZBooru, nicknamed **Parsa**. This component continuously parses links associated with submissions in chapters, converting them into direct image links. Note that there are optimized procedures if a link is from a particular site or a link is of a particular form:
 
@@ -108,7 +110,7 @@ Several processes for each `type` of Link can be run simultaneously. Each chapte
 5. Put failed links sent to the corresponding endpoint of **Booru**.
 6. Sleep for 60 seconds, then go back to step 1.
 
-##### Coco
+### Coco
 
 The **image encoder** component for LZBooru, nicknamed **Coco**. This component continuously downloads, resizes, and encodes images through chapters. Currently, images are resized to 512 × 512 resolution and can be encoded as:
 
@@ -124,7 +126,7 @@ Each chapter executes the following procedure:
 5. Delete failed images sent to the corresponding endpoint of **Booru**.
 6. Sleep for 60 seconds, then go back to step 1.
 
-### Image Similarity Methods
+## Image Similarity Methods
 
 Currently, the following methods are implemented:
 
@@ -132,13 +134,13 @@ Currently, the following methods are implemented:
 - **Euclidean norm**: The histogram data is compared using the lower [euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) of the difference as vectors.
 - **Difference hash norm**: The difference hash data is compared by performing bitwise XOR and summing up the number of set bits.
 
-### Limitations
+## Limitations
 
 Due to Flask's basic structure, I had the pleasure and pain of self-learning and coding trivial functions like API authentication. In the end, the program is more fragile than I'd like, does not handle errors very well, and might not scale very well. Incoming results from the APIs used are subject to stability issues. Some results may be missing. Several computations could be handled better but due to time issues I cannot address them right now. Multiprocessing lead to a few issues but was still able to be implemented in the end.
 
 I do plan to try other tech stacks (Django or even Node) upon revisiting this project.
 
-### Final Thoughts
+## Final Thoughts
 
 I had hoped to make a complete stack for LZBooru by the end of my holiday, but I ran out of time, as usual. :P
 
